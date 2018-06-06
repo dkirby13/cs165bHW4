@@ -40,8 +40,7 @@ import os
 import skimage
 from skimage import data
 from glob import glob
-from PIL import Image
-from numpy import array
+import numpy as np
 from skimage.color import rgb2gray
 from skimage import transform
 import tensorflow as tf
@@ -63,13 +62,12 @@ def load_training_data(data_directory):
             images.append(skimage.data.imread(f))
             labels.append(int(d))
 
-    images = rgb2gray(array(images))
-    labels = array(labels)
-    
     return images, labels
 
 images, labels = load_training_data("./hw4_train")
 
+images = np.array(images)
+images = rgb2gray(images)
 
 x = tf.placeholder(dtype = tf.float32, shape = [None, 28, 28])
 y = tf.placeholder(dtype = tf.int32, shape = [None])

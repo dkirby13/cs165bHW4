@@ -52,6 +52,7 @@ def load_training_data(data_directory):
     
     labels = []
     images = []
+    directories.sort()
     for d in directories:
         label_directory = os.path.join(data_directory, d)
         files = [os.path.join(label_directory, f)
@@ -61,7 +62,7 @@ def load_training_data(data_directory):
         for f in files:
             images.append(skimage.data.imread(f))
             labels.append(int(d))
-    images = [transform.resize(image, (28, 28)) for image in images]
+
     images = rgb2gray(array(images))
     labels = array(labels)
     
@@ -70,7 +71,7 @@ def load_training_data(data_directory):
 images, labels = load_training_data("./hw4_train")
 
 
-x = tf.placeholder(dtype = tf.float32, shape = [None, 28])
+x = tf.placeholder(dtype = tf.float32, shape = [None, 28, 28])
 y = tf.placeholder(dtype = tf.int32, shape = [None])
 
 

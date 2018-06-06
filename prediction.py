@@ -45,6 +45,19 @@ from skimage.color import rgb2gray
 from skimage import transform
 import tensorflow as tf
 
+def load_test_data(label_directory):
+    images = []
+    files = [os.path.join(label_directory, f)
+             for f in os.listdir(label_directory)
+             if f.endswith(".png")]
+    files.sort()
+    for f in files:
+        images.append(skimage.data.imread(f))
+            
+
+    return images
+
+
 def load_training_data(data_directory):
     directories = [d for d in os.listdir(data_directory)
                    if os.path.isdir(os.path.join(data_directory, d))]
@@ -67,7 +80,7 @@ def load_training_data(data_directory):
 images, labels = load_training_data("./hw4_train")
 
 images = np.array(images)
-images = rgb2gray(images)
+#images = rgb2gray(images)
 
 x = tf.placeholder(dtype = tf.float32, shape = [None, 28, 28])
 y = tf.placeholder(dtype = tf.int32, shape = [None])
@@ -97,13 +110,13 @@ sess.run(tf.global_variables_initializer())
 
 for i in range(201):
     _, accuracy_val = sess.run([train_op, accuracy], feed_dict={x:images, y:labels})
-    if i%10 == 0:
-        
+    #if i%10 == 0:
+     #   print(accuracy_val)
 
+test_images = load_test_data("./hw4_test")
 
-        print(accuracy_val)
+test_images = np.array(test_images)
+predicted = sess.run([correct_pred], feed_dict={x:test_images})[0]
 
-
-
-
+print(predicted)
 
